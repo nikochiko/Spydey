@@ -46,11 +46,14 @@ def url_picker(url_list, base_url):
     tel = re.compile(tel_pattern)
     next_dir = re.compile(next_dir_pattern)
     file_with_extension = re.compile(file_with_extension_pattern)
+    base_split = base_url.split(r'/')
     for each_url in url_list:
         if(same_dir.match(each_url)):
             if(file_with_extension.match(base_url)):
-                base_split = base_url.split(r'/')
+                
                 res.append("\/".join(base_split[:len(base_split)-1]) + each_url[2:])
             else:
                 res.append(base_url+each_url[2:])
-    ###INCOMPLETE###
+                continue
+        if(prev_dir.match(each_url)):
+###INCOMPLETE###
