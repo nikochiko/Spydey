@@ -27,7 +27,8 @@ def getPage(url):
 def extractLinks(source, pre_list=None):
 
     #Taking a lowercase copy to find index of links and then taking the links from real source.
-
+    if( not source):
+        return []
     source_lowercase = source.lower()
 
     if(r'<a ' not in source_lowercase):
@@ -68,7 +69,7 @@ def url_picker(url_list, base_url):
 
     res = []
 
-    same_dir_pattern = "\.\/.*"
+    same_dir_pattern = "\./.*"
 
     prev_dir_pattern = "\.\.\/.*"
 
@@ -78,7 +79,7 @@ def url_picker(url_list, base_url):
 
     next_dir_pattern = "\/.*"
 
-    file_with_extension_pattern=".*\.{3-4}"
+    file_with_extension_pattern=".*\.{3,4}"
 
     same_dir = re.compile(same_dir_pattern)
 
@@ -136,4 +137,56 @@ def url_picker(url_list, base_url):
             res.append(each_url)
             continue
     return res
-###INCOMPLETE###
+def subdir_splitter(refined_url_list, pre_list=None):
+    http_pattern=r'http://.*'
+    https_pattern=r'https://.*'
+    http = re.compile(http_pattern)
+    https = re.compile(https_pattern)
+    res = []
+    selected_res = []
+    for each_url in refined_url_list:
+        if(http.match(each_url)):
+            refined_url = each_url[7:]
+        elif(https.match(each_url)):
+            refined_url = each_url[8:]
+        else:
+            refined_url = each_url
+        temp_split = refined_url.split(r'/')
+        temp_str = ""
+        i = 0
+        while(i < len(temp_split)):
+            temp_str += r"/"+temp_split[i]
+            if(temp_str not in res):
+                res.append(temp_str)
+            else:
+                i+=1 
+                continue
+            i += 1
+        del temp_str
+        for url in res:
+            if(pre_list):
+                if(url not in pre_list):
+                    selected_res.append(url)
+            else:
+                selected_res.append(url)
+    return (list(set(pre_list+selected_res)) if pre_list else (list(set(selected_res))))
+def crawl_each_url(url):
+    pre_list = extractLinks(getPage(url))
+    refined_pre_list = url_picker(pre_list, url)
+    return url_picker(subdir_splitter(refined_pre_list), url)
+def crawler_engine(url):
+    if( not (url[-1]==r'/')):
+        url += r'/'
+    pre_list = extractLinks(getPage(url))
+    refined_pre_list = url_picker(pre_list, url)
+    to_crawl = url_picker(subdir_splitter(refined_pre_list), url)
+    crawled = [url]
+    while(to_crawl):
+        temp_url = to_crawl.pop()
+        if(temp_url not in crawled):
+            temp_url_crawl = crawl_each_url(temp_url)
+            for each in temp_url_crawl:
+                if(each not in crawled and each not in to_crawl):
+                    to_crawl.append(each)
+        crawled.append(temp_url)
+    return crawled, pre_list, refined_pre_list, to_crawl
