@@ -189,4 +189,4 @@ def crawler_engine(url):
                 if(each not in crawled and each not in to_crawl):
                     to_crawl.append(each)
         crawled.append(temp_url)
-    return crawled, pre_list, refined_pre_list, to_crawl
+    return crawled
