@@ -127,10 +127,10 @@ def url_picker(url_list, base_url):
             else:
                 res.append(base_url+each_url[1:])
             continue
-        if(r'/' not in each_url and file_with_extension.match(each_url)):
+        if((r'/' not in each_url and file_with_extension.match(each_url)) and r'www.' not in each_url):
             res.append(base_url+each_url)
             continue
-        if((r'/' in each_url and r':' not in each_url)):
+        if(((r'/' in each_url and r':' not in each_url)) and r'www.' not in each_url):
             res.append(base_url+each_url)
             continue
         else:
