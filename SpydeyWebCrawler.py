@@ -78,7 +78,7 @@ def url_picker(url_list, base_url):
 
     next_dir_pattern = "\/.*"
 
-    file_with_extension_pattern=".*\..*"
+    file_with_extension_pattern=".*\.{3-4}"
 
     same_dir = re.compile(same_dir_pattern)
 
@@ -98,7 +98,7 @@ def url_picker(url_list, base_url):
 
         if(same_dir.match(each_url)):
 
-            if(file_with_extension.match(base_url) and r'www.' not in base_url):
+            if(file_with_extension.match(base_url)):
 
                 res.append(r"/".join(base_split[:len(base_split)-1]) + each_url[2:])  
 
@@ -110,7 +110,7 @@ def url_picker(url_list, base_url):
 
         if(prev_dir.match(each_url)):
 
-            if(file_with_extension.match(base_url) and r'www.' not in base_url):
+            if(file_with_extension.match(base_url)):
 
                 res.append(r"/".join(base_split[:len(base_split)-2]) + each_url[3:])
 
@@ -121,7 +121,7 @@ def url_picker(url_list, base_url):
         if(email.match(each_url) or tel.match(each_url)):
             continue
         if(next_dir.match(each_url)):
-            if(file_with_extension.match(base_url) and r'www.' not in base_url):
+            if(file_with_extension.match(base_url)):
                 res.append(r"/".join(base_split)[:len(base_split)-1] + each_url[1:])
             else:
                 res.append(base_url+each_url[1:])
