@@ -50,10 +50,13 @@ def url_picker(url_list, base_url):
     for each_url in url_list:
         if(same_dir.match(each_url)):
             if(file_with_extension.match(base_url)):
-                
-                res.append("\/".join(base_split[:len(base_split)-1]) + each_url[2:])
+                res.append("\/".join(base_split[:len(base_split)-1]) + each_url[2:]))    
             else:
                 res.append(base_url+each_url[2:])
-                continue
+            continue
         if(prev_dir.match(each_url)):
+            if(file_with_extension.match(base_url)):
+                res.append("\/".join(base_split[:len(base_split)-2]) + each_url[3:])
+            else:
+                res.append('\/'.join(base_split[:len(base_split)-1])+each_url[3:]))
 ###INCOMPLETE###
