@@ -146,9 +146,9 @@ def subdir_splitter(refined_url_list, pre_list=None):
     selected_res = []
     for each_url in refined_url_list:
         if(http.match(each_url)):
-            refined_url = each_url[7:]
+            refined_url = each_url[each_url.find(r'/',7):]
         elif(https.match(each_url)):
-            refined_url = each_url[8:]
+            refined_url = each_url[each_url.find(r'/',8):]
         else:
             refined_url = each_url
         temp_split = refined_url.split(r'/')
@@ -169,12 +169,12 @@ def subdir_splitter(refined_url_list, pre_list=None):
                     selected_res.append(url)
             else:
                 selected_res.append(url)
-    return (list(set(pre_list+selected_res)) if pre_list else (list(set(selected_res))))
+    return (list(set(pre_list+selected_res)) if pre_list else list(set(selected_res)))
 def crawl_each_url(url):
     pre_list = extractLinks(getPage(url))
     refined_pre_list = url_picker(pre_list, url)
     return url_picker(subdir_splitter(refined_pre_list), url)
-def crawler_engine(url):
+def crawl_engine(url):
     if( not (url[-1]==r'/')):
         url += r'/'
     pre_list = extractLinks(getPage(url))
@@ -190,3 +190,4 @@ def crawler_engine(url):
                     to_crawl.append(each)
         crawled.append(temp_url)
     return crawled
+        
