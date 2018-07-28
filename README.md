@@ -23,4 +23,4 @@
   </p>
   <hr>
   <br><br><br>
-  Scans only in <a tags by default.
+  Scans only in &lta tags by default.
