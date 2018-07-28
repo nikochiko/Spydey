@@ -174,10 +174,13 @@ def crawl_each_url(url):
     pre_list = extractLinks(getPage(url))
     refined_pre_list = url_picker(pre_list, url)
     return url_picker(subdir_splitter(refined_pre_list), url)
-def crawl_engine(url):
+def crawl_engine(url, option=None):
     if( not (url[-1]==r'/')):
         url += r'/'
-    pre_list = extractLinks(getPage(url))
+    if(option == "all"):
+        pre_list=extract_all_links(url)
+    else:
+        pre_list = extractLinks(getPage(url))    
     refined_pre_list = url_picker(pre_list, url)
     to_crawl = url_picker(subdir_splitter(refined_pre_list), url)
     crawled = [url]
@@ -190,4 +193,41 @@ def crawl_engine(url):
                     to_crawl.append(each)
         crawled.append(temp_url)
     return crawled
+  def extract_all_links(source, pre_list=None):
+    ls=[]
+    if( not source):
+        return []
+    if(r"<" not in source):
+        return []
+    source_lowercase = source.lower()
+    start_pos = 0
+    lt_pos=0
+    gt_pos=0
+    while((lt_pos<len(source_lowercase) and gt_pos<len(source_lowercase)) and ((lt_pos>=0) and gt_pos>=0)):
+        lt_pos=source_lowercase.find(r'<', gt_pos)
+        gt_pos=source_lowercase.find(r'>', lt_pos)
+        #THIS WILL EVEN CATCH SRC AND HREF LINKS IN COMMENTS!!!
+        if(lt_pos>=0 and gt_pos >=0):
+            src_pos=source_lowercase.find("src", lt_pos, gt_pos)
+            src_start_pos=(source_lowercase.find(r'"', src_pos, gt_pos)+1) #AVOIDING SEARCHING FOR LINKS OUT OF <> IN SOURCE    
+            src_end_pos=(source_lowercase.find(r'"', src_start_pos, gt_pos))
+            if(src_end_pos > src_start_pos):
+                temp=source[src_start_pos:src_end_pos]
+            else:
+                continue
+            if(pre_list):
+                if(temp not in ls and temp not in pre_list):
+                    ls.append(temp)
+            elif(temp not in ls):
+                ls.append(temp)
+            href_pos=source_lowercase.find(r'href',lt_pos, gt_pos)
+            href_start_pos=(source_lowercase.find(r'"', href_pos, gt_pos)+1)
+            href_end_pos=(source_lowercase.find(r'"', href_start_pos,gt_pos))
+            if(href_end_pos > href_start_pos):
+                temp=source[href_start_pos:href_end_pos]
+            else:
+                continue
+        else:
+            return []
         
+        return ls
