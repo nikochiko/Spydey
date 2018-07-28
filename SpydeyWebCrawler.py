@@ -193,7 +193,7 @@ def crawl_engine(url, option=None):
                     to_crawl.append(each)
         crawled.append(temp_url)
     return crawled
-  def extract_all_links(source, pre_list=None):
+def extract_all_links(source, pre_list=None):
     ls=[]
     if( not source):
         return []
