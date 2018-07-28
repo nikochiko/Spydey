@@ -170,8 +170,8 @@ def subdir_splitter(refined_url_list, pre_list=None):
             else:
                 selected_res.append(url)
     return (list(set(pre_list+selected_res)) if pre_list else list(set(selected_res)))
-def crawl_each_url(url):
-    pre_list = extractLinks(getPage(url))
+def crawl_each_url(url, extract_func=extractLinks):
+    pre_list = extract_func(getPage(url))
     refined_pre_list = url_picker(pre_list, url)
     return url_picker(subdir_splitter(refined_pre_list), url)
 def crawl_engine(url, option=None):
