@@ -187,7 +187,10 @@ def crawl_engine(url, option=None):
     while(to_crawl):
         temp_url = to_crawl.pop()
         if(temp_url not in crawled):
-            temp_url_crawl = crawl_each_url(temp_url)
+            if(option=="all"):
+                temp_url_crawl=crawl_each_url(temp_url, extract_all_links)
+            else:
+                temp_url_crawl = crawl_each_url(temp_url)
             for each in temp_url_crawl:
                 if(each not in crawled and each not in to_crawl):
                     to_crawl.append(each)
