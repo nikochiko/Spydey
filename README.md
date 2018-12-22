@@ -7,7 +7,6 @@
 <p>
   @author: coldk91ght
   <br>
-  &quot&quot&quotShould not be used commercially without prior permission from author.&quot&quot&quot
  </p>
  <p>
   
